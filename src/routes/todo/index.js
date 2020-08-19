@@ -8,6 +8,7 @@ export default class TodoList extends Component {
 
 	constructor(props){
 		super(props)
+		//defaults
 		this.state = {
 			toDos: [{
 				name: "make some more todos",
@@ -19,20 +20,27 @@ export default class TodoList extends Component {
 	}
 
 	componentWillMount(){
+		//before anything, lets check and see if the user has been here before and left some to-Dos for us
 		this.checkForLocalStorageValues()
 	}
 
+
 	checkForLocalStorageValues = async () => {
 		const localState = await this.loadFromStorage();
-		console.log(localState)
+		
+		//if there is a localstate saved, but its empty, lets not use it and show to default list instead
 		if (localState && localState["toDos"].length){
 			if (localState["toDos"] && localState["count"]){
+				
+				//otherwise overwrite the state so we can resume where we left off
 				this.setState({toDos: localState["toDos"], count: localState["count"]})
 			}
 		}
 	}
 
 	componentDidUpdate() {
+		//anytime anything new happens, it gets saved to local storage. 
+		//TRACK YOUR EVERY MOVE
 		const SavedInfo = {
 			toDos: this.state.toDos,
 			count: this.state.count
@@ -41,41 +49,42 @@ export default class TodoList extends Component {
 	}
 
 	loadFromStorage = () => {
-        	const storedLocalInfo = localStorage.getItem("savedInfo");
-			const parsedstoredLocalInfo = storedLocalInfo && JSON.parse(storedLocalInfo);
-			console.log(storedLocalInfo)
-			console.log(parsedstoredLocalInfo)
-            if (parsedstoredLocalInfo) {
-                return parsedstoredLocalInfo;
-            } else {
-                return undefined;
-            }
-    
+		const storedLocalInfo = localStorage.getItem("savedInfo");
+		const parsedstoredLocalInfo = storedLocalInfo && JSON.parse(storedLocalInfo);
+		if (parsedstoredLocalInfo) {
+			return parsedstoredLocalInfo;
+		} else {
+			return undefined;
+		}
     };
 
 	getTodos = async() => {
+		//maybe someday we want to get some todos from a data base or something theres a make request and fetch call set up ready for that. 
 		// await makeRequest('https://jsonplaceholder.typicode.com/todos')
 		// 	.then(response => {
 		// 		todos = response;
 		// 		this.setState({{toDos: todos}})
 		// 	})
 		
-
+		//but for now, just return the current toDos
 		return this.state.toDos
 	}
 
 	addTodo = async (title) => {
 		if(title){
+			//make a new list,
 			const newList = await this.getTodos();
+			// each to-do needs a unique id, in order to remove and complete to-dos with matching names 
 			const idx = this.state.count + 1;
 			this.setState({count: idx});
+			//make the new todo
 			const newTodo = {
 				name: title,
 				completed: false,
 				id: idx
 			}
 			newList.push(newTodo);
-
+			// push it to the state
 			this.setState({toDos: newList});
 			console.log('added' , newTodo)
 		}
@@ -83,11 +92,13 @@ export default class TodoList extends Component {
 
 	removeToDo = (id) => {
 		if (id){
-			console.log('remove me')
 			this.state.toDos.map(async(item , i) => {
 				if (item.id === id){
+					//make a new list, 
 					const newList = await this.getTodos();
+					//modify the new list
 					newList.splice(i, 1);
+					//push it to the state
 					this.setState({toDos: newList});
 					console.log('removed' , item.name)
 				}
@@ -99,8 +110,11 @@ export default class TodoList extends Component {
 		if (id) {
 			this.state.toDos.map(async (item , i) =>{
 				if (item.id === id){
+					//make a new list, 
 					const newList = await this.getTodos();
+					//modify the new list
 					newList[i].completed = true;
+					//push it to the state
 					this.setState({toDos: newList});
 					console.log("completed " , item.name);
 				}
