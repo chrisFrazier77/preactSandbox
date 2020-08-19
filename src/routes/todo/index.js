@@ -18,6 +18,41 @@ export default class TodoList extends Component {
 		}
 	}
 
+	componentWillMount(){
+		this.checkForLocalStorageValues()
+	}
+
+	checkForLocalStorageValues = async () => {
+		const localState = await this.loadFromStorage();
+		console.log(localState)
+		if (localState && localState["toDos"].length){
+			if (localState["toDos"] && localState["count"]){
+				this.setState({toDos: localState["toDos"], count: localState["count"]})
+			}
+		}
+	}
+
+	componentDidUpdate() {
+		const SavedInfo = {
+			toDos: this.state.toDos,
+			count: this.state.count
+		}
+		localStorage.setItem("savedInfo",JSON.stringify(SavedInfo));
+	}
+
+	loadFromStorage = () => {
+        	const storedLocalInfo = localStorage.getItem("savedInfo");
+			const parsedstoredLocalInfo = storedLocalInfo && JSON.parse(storedLocalInfo);
+			console.log(storedLocalInfo)
+			console.log(parsedstoredLocalInfo)
+            if (parsedstoredLocalInfo) {
+                return parsedstoredLocalInfo;
+            } else {
+                return undefined;
+            }
+    
+    };
+
 	getTodos = async() => {
 		// await makeRequest('https://jsonplaceholder.typicode.com/todos')
 		// 	.then(response => {
@@ -72,9 +107,8 @@ export default class TodoList extends Component {
 			})
 		}
 	}
-	
+
 	render(props, state) {
-		
 		return (
 			<div class={style.todo}>
 				<h1>todo List</h1>
