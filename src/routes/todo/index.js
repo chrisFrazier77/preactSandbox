@@ -70,7 +70,12 @@ export default class TodoList extends Component {
 		return this.state.toDos
 	}
 
-	addTodo = async (title) => {
+	addTodo = async (title, e) => {
+		if (e){
+			e.preventDefault();
+		}
+		const passedIn = title;
+		console.log(passedIn)
 		if(title){
 			//make a new list,
 			const newList = await this.getTodos();
@@ -124,17 +129,17 @@ export default class TodoList extends Component {
 
 	render(props, state) {
 		return (
-			<div class={style.todo}>
+			<div class={style.todo} id="todo">
 				<h1>todo List</h1>
 				<p>This is the todo component.</p>
 
 				<AddToDoForm onSubmit={this.addTodo}/>
-				<div class={style.todoListWrapper}>
+				<div class={style.todoListWrapper} id="todoListWrapper">
 
-					<h2 class={style.listTitle}>My To-Do List</h2>
+					<h2 class={style.listTitle} id="listTitle">My To-Do List</h2>
 						{state.toDos.length ? state.toDos.map((todo, idx) => {
 							return(
-								<div>
+								<div class="todoItem">
 									<TodoItem name={todo.name} remove={this.removeToDo} id={todo.id} completed={todo.completed} complete={this.completeTodo}/>
 								</div>
 							)
