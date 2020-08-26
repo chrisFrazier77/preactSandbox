@@ -21,7 +21,7 @@ export default class TodoList extends Component {
 
 	componentWillMount(){
 		//before anything, lets check and see if the user has been here before and left some to-Dos for us
-		this.checkForLocalStorageValues()
+		this.checkForLocalStorageValues();
 	}
 
 
@@ -41,9 +41,26 @@ export default class TodoList extends Component {
 	componentDidUpdate() {
 		//anytime anything new happens, it gets saved to local storage. 
 		//TRACK YOUR EVERY MOVE
-		const SavedInfo = {
-			toDos: this.state.toDos,
-			count: this.state.count
+		let SavedInfo;
+		if (this.state.toDos.length){
+			console.log('here')
+			SavedInfo = {
+				toDos: this.state.toDos,
+				count: this.state.count
+			}
+		}else {
+			console.log('there')
+
+			//set back to the default
+			SavedInfo = {
+				toDos: [{
+					name: "make some more todos",
+					completed: false,
+					id: 1
+				}],
+				count: 1
+			}
+			this.setState({toDos: SavedInfo.toDos, count: SavedInfo.count})
 		}
 		localStorage.setItem("savedInfo",JSON.stringify(SavedInfo));
 	}

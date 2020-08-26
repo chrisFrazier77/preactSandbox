@@ -19,7 +19,7 @@ describe("go to page", function(){
     })
 })
 
-describe("toDo list tests", function (){
+describe("check that everything exists", function (){
 
     it ("should have a new todo list & add input & button",function(){
         
@@ -64,8 +64,11 @@ describe('delete a todo', function () {
         cy.get('.remove:first').click({force:true});
         expect(cy.get('.completed').should("have.length",0))
     });
-
-    it("should add the default todo back to the list",function(){
-        expect(cy.get(".todoItemWrapper").should('have.length', 1))
-    })
 });
+
+describe("add back the default todo", function() {
+    it("should automatically add the default todo back to the list",function(){
+        expect(cy.get(".todoItemWrapper").should('have.length', 1));
+        expect(cy.get(".todoItemWrapper").contains('make some more todos'))
+    })
+})
