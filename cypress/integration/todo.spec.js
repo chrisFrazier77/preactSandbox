@@ -36,35 +36,36 @@ describe("toDo list tests", function (){
 describe('add new to do item',function() {
     it("should be able to type into input and submit form and add new line item",function(){
 
-        expect(cy.get(".todoItem").should('have.length', 1))
+        expect(cy.get(".todoItemWrapper").should('have.length', 1))
 
         cy.get('#formWrapper').get(".text-input").type('adding a new to do!').should('have.value', 'adding a new to do!').trigger('change');
 
         cy.get('#formWrapper').get("button").click();
 
-        expect(cy.get(".todoItem").should('have.length', 2))
+        expect(cy.get(".todoItemWrapper").should('have.length', 2))
 
     });
 });
 
 describe('complete a todo', function () {
-
-    it("should be able to complete", function(){    
-        // const $input = )
-
-        // cy.get('#todoListWrapper').find(".todoItem[idx='1']")
-
-        // expect(cy.get(".todoItem[idx='1'] checkbox").should('not.be.checked'))
-        
-        // cy.get('#todoListWrapper').then(($wrapper) => {
-        //     console.log($wrapper.find(".todoItem[idx='1']"))
-
-        // })
-
-        cy.get('.todoItem').find('checkbox')
-
-        // $input.click();
-        // expect($input).to.be.checked;
-
+    it("should be able to complete", function(){  
+        expect(cy.get('.completed').should("have.length",0))
+        cy.get('.todoItemWrapper > div > div > input').click({ multiple: true });
+        expect(cy.get('.completed').should("have.length",2))
     });
+});
+
+describe('delete a todo', function () {
+    it("should be able to delete", function(){
+        expect(cy.get('.completed').should("have.length",2))
+        expect(cy.get(".todoItemWrapper").should('have.length', 2))
+        cy.get('.remove:first').click();
+        expect(cy.get('.completed').should("have.length",1))
+        cy.get('.remove:first').click({force:true});
+        expect(cy.get('.completed').should("have.length",0))
+    });
+
+    it("should add the default todo back to the list",function(){
+        expect(cy.get(".todoItemWrapper").should('have.length', 1))
+    })
 });

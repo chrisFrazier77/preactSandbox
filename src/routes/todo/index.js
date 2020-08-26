@@ -139,7 +139,7 @@ export default class TodoList extends Component {
 					<h2 class={style.listTitle} id="listTitle">My To-Do List</h2>
 						{state.toDos.length ? state.toDos.map((todo, idx) => {
 							return(
-								<div class="todoItem">
+								<div class="todoItemWrapper">
 									<TodoItem name={todo.name} remove={this.removeToDo} id={todo.id} completed={todo.completed} complete={this.completeTodo}/>
 								</div>
 							)
