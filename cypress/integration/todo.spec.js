@@ -43,7 +43,7 @@ describe('add new to do item',function() {
         cy.get('#formWrapper').get("button").click();
 
         expect(cy.get(".todoItemWrapper").should('have.length', 2))
-
+        expect(cy.get(".text-input").should('have.value', ''))
     });
 });
 
@@ -70,5 +70,6 @@ describe("add back the default todo", function() {
     it("should automatically add the default todo back to the list",function(){
         expect(cy.get(".todoItemWrapper").should('have.length', 1));
         expect(cy.get(".todoItemWrapper").contains('make some more todos'))
+        expect(cy.get('.completed').should("have.length",0))
     })
 })
