@@ -43,13 +43,11 @@ export default class TodoList extends Component {
 		//TRACK YOUR EVERY MOVE
 		let SavedInfo;
 		if (this.state.toDos.length){
-			console.log('here')
 			SavedInfo = {
 				toDos: this.state.toDos,
 				count: this.state.count
 			}
 		}else {
-			console.log('there')
 
 			//set back to the default
 			SavedInfo = {
@@ -91,8 +89,6 @@ export default class TodoList extends Component {
 		if (e){
 			e.preventDefault();
 		}
-		const passedIn = title;
-		console.log(passedIn)
 		if(title){
 			//make a new list,
 			const newList = await this.getTodos();
